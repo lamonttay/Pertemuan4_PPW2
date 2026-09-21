@@ -26,8 +26,14 @@
                 <tr>
                     <td>{{ $project->title }}</td>
                     <td>{{ $project->description }}</td>
-                    <td>
-                        <a href="{{ route('projects.show', $project->id) }}">View</a>
+                    <td style="display: flex; gap: 5px;">
+                        <a href="{{ route('projects.show', $project->id) }}" style="padding: 2px 5px; background: gray; color: white; text-decoration: none;">View</a>
+                        <a href="{{ route('projects.edit', $project->id) }}" style="padding: 2px 5px; background: orange; color: white; text-decoration: none;">Edit</a>
+                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus?');" style="margin: 0;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="padding: 2px 5px; background: red; color: white; border: none; cursor: pointer;">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @empty
