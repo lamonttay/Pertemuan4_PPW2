@@ -6,6 +6,6 @@
     <div>
         <h1>Welcome</h1>
         <p>I'm a learning Software Engineer</p>
-        <a href="{{ route('projects') }}">View My Work</a>
+        <a href="{{ route('projects.index') }}">View My Work</a>
     </div>
 @endsection
