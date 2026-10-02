@@ -17,9 +17,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            ['name' => 'Test User', 'password' => bcrypt('password')]
+        );
+
+        \App\Models\Post::create([
+            'title'       => 'Post Pertama (Draft)',
+            'description' => 'Ini adalah postingan contoh dengan status draft.',
+            'status'      => 'draft',
+        ]);
+
+        \App\Models\Post::create([
+            'title'       => 'Post Kedua (Published)',
+            'description' => 'Ini adalah postingan contoh dengan status published.',
+            'status'      => 'published',
         ]);
     }
 }

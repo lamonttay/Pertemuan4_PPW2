@@ -33,6 +33,17 @@
             @enderror
         </div>
 
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="form-control">
+                <option value="draft" {{ old('status', 'draft') == 'draft' ? 'selected' : '' }}>Draft</option>
+                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+            </select>
+            @error('status')
+                <small style="color: #ef4444;">{{ $message }}</small>
+            @enderror
+        </div>
+
         <div style="margin-top: 20px;">
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="{{ route('posts.index') }}" class="btn btn-secondary" style="margin-left: 8px;">Cancel</a>

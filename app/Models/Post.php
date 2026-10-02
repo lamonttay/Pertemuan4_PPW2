@@ -2,10 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    // Izinkan kolom ini diisi lewat mass assignment (diperlukan untuk create & update)
-    protected $fillable = ['title', 'description'];
+    use SoftDeletes;
+
+    protected $fillable = ['title', 'description', 'status'];
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeToday(Builder $query): Builder
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    public function scopeSearch(Builder $query, string $keyword): Builder
+    {
+        return $query->where('title', 'like', "%{$keyword}%");
+    }
 }
