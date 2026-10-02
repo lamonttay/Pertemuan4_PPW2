@@ -10,11 +10,16 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(Request $request)
+{
+    if ($request->query('status') === 'published') {
+        $posts = Post::published()->get();
+    } else {
         $posts = Post::all();
-        return view('posts.index', compact('posts'));
     }
+
+    return view('posts.index', compact('posts'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +40,7 @@ class PostController extends Controller
             'description' => 'required|string|min:10',
         ]);
 
-        Post::create($request->only('title', 'description'));
+        Post::create($request->only('title', 'description', 'status'));
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -71,7 +76,7 @@ class PostController extends Controller
         ]);
 
         $post = Post::findOrFail($id);
-        $post->update($request->only('title', 'description'));
+        $post->update($request->only('title', 'description', 'status'));
 
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully.');
@@ -88,4 +93,27 @@ class PostController extends Controller
         return redirect()->route('posts.index')
             ->with('success', 'Post deleted successfully.');
     }
+    public function trash()
+{
+    $posts = Post::onlyTrashed()->get();
+    return view('posts.trash', compact('posts'));
+}
+
+public function restore(string $id)
+{
+    $post = Post::onlyTrashed()->findOrFail($id);
+    $post->restore();
+
+    return redirect()->route('posts.trash')
+        ->with('success', 'Post restored successfully.');
+}
+
+public function forceDelete(string $id)
+{
+    $post = Post::onlyTrashed()->findOrFail($id);
+    $post->forceDelete();
+
+    return redirect()->route('posts.trash')
+        ->with('success', 'Post permanently deleted.');
+}
 }

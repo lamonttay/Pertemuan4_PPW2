@@ -3,10 +3,15 @@
 @section('title', 'Posts')
 
 @section('content')
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h1>Posts</h1>
-        <a href="{{ route('posts.create') }}" class="btn btn-primary">+ Add New Post</a>
-    </div>
+    <div style="display: flex; gap: 8px;">
+    @if (request('status') === 'published')
+        <a href="{{ route('posts.index') }}" class="btn btn-secondary">Show All</a>
+    @else
+        <a href="{{ route('posts.index', ['status' => 'published']) }}" class="btn btn-secondary">Published Only</a>
+    @endif
+    <a href="{{ route('posts.trash') }}" class="btn btn-secondary">Trash</a>
+    <a href="{{ route('posts.create') }}" class="btn btn-primary">+ Add New Post</a>
+</div>
 
     {{-- Flash message for success --}}
     @if (session('success'))
