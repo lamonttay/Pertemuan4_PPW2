@@ -5,7 +5,7 @@
 @section('content')
     <div>
         <h1>Welcome</h1>
-        <p>I'm a learning Software Engineer</p>
-        <a href="{{ route('projects.index') }}">View My Work</a>
+        <p style="margin-bottom: 16px; color: #475569;">I'm a learning Software Engineer</p>
+        <a href="{{ route('projects.index') }}" class="btn btn-primary">View My Work</a>
     </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -11,7 +12,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -19,7 +21,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -27,7 +29,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input: title min 5 karakter, description min 10 karakter
+        $request->validate([
+            'title'       => 'required|string|min:5|max:255',
+            'description' => 'required|string|min:10',
+        ]);
+
+        Post::create($request->only('title', 'description'));
+
+        return redirect()->route('posts.index')
+            ->with('success', 'Post created successfully.');
     }
 
     /**
@@ -35,7 +46,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -43,7 +55,8 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -51,7 +64,17 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validasi sama seperti store, dengan aturan min
+        $request->validate([
+            'title'       => 'required|string|min:5|max:255',
+            'description' => 'required|string|min:10',
+        ]);
+
+        $post = Post::findOrFail($id);
+        $post->update($request->only('title', 'description'));
+
+        return redirect()->route('posts.index')
+            ->with('success', 'Post updated successfully.');
     }
 
     /**
@@ -59,6 +82,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->route('posts.index')
+            ->with('success', 'Post deleted successfully.');
     }
 }

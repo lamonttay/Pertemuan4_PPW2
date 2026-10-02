@@ -13,3 +13,4 @@ Route::resource('posts', PostController::class);
 
 // Pake cara ringkas biar ga capek nulis route CRUD satu-satu buat projects
 Route::resource('projects', ProjectController::class);
+
